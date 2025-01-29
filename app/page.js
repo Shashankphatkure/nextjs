@@ -229,28 +229,63 @@ export default function OrdersPage() {
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
 
-                {/* Notifications Dropdown - Added z-index */}
+                {/* Enhanced Notifications Menu */}
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg py-2 border border-gray-200 z-[60]">
-                    <div className="px-4 py-2 border-b border-gray-100">
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-100 z-[60]
+                                  overflow-hidden transform transition-all duration-200 origin-top">
+                    {/* Header */}
+                    <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                       <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+                      <span className="px-2 py-1 text-xs font-medium text-[#1dbf73] bg-[#1dbf73]/10 rounded-full">
+                        5 new
+                      </span>
                     </div>
-                    {notifications.map((notification) => (
-                      <div 
-                        key={notification.id} 
-                        className={`px-4 py-3 hover:bg-gray-50 cursor-pointer ${
-                          notification.unread ? 'bg-blue-50/50' : ''
-                        }`}
-                      >
-                        <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                        <p className="text-sm text-gray-500">{notification.message}</p>
-                        <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+
+                    {/* Notifications List */}
+                    <div className="max-h-[380px] overflow-y-auto">
+                      {notifications.map((notification) => (
+                        <div 
+                          key={notification.id} 
+                          className={`px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200
+                                     ${notification.unread ? 'bg-[#1dbf73]/5' : ''} relative group`}
+                        >
+                          {notification.unread && (
+                            <span className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-[#1dbf73] rounded-full"></span>
+                          )}
+                          <div className="flex gap-3">
+                            <div className={`mt-0.5 p-2 rounded-lg ${
+                              notification.unread ? 'bg-[#1dbf73]/10 text-[#1dbf73]' : 'bg-gray-100 text-gray-500'
+                            }`}>
+                              {/* Icon based on notification type */}
+                              <BellIcon className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1">
+                              <p className={`text-sm font-medium ${notification.unread ? 'text-gray-900' : 'text-gray-600'}`}>
+                                {notification.title}
+                              </p>
+                              <p className="text-sm text-gray-500 line-clamp-2">{notification.message}</p>
+                              <p className="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                                <ClockIcon className="w-3 h-3" />
+                                {notification.time}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <button className="text-sm text-[#1dbf73] hover:text-[#19a463] font-medium 
+                                         transition-colors duration-200">
+                          View all notifications
+                        </button>
+                        <button className="text-xs text-gray-500 hover:text-gray-700 
+                                         transition-colors duration-200">
+                          Mark all as read
+                        </button>
                       </div>
-                    ))}
-                    <div className="px-4 py-2 border-t border-gray-100">
-                      <button className="text-sm text-[#1dbf73] hover:text-[#19a463] font-medium">
-                        View all notifications
-                      </button>
                     </div>
                   </div>
                 )}
@@ -259,41 +294,101 @@ export default function OrdersPage() {
               {/* Profile Dropdown */}
               <div className="relative" ref={profileRef}>
                 <button 
-                  className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100"
+                  className="flex items-center gap-3 p-1.5 pl-3 rounded-full hover:bg-gray-100
+                             transition-all duration-200 group"
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                 >
-                  <img
-                    src="https://ui-avatars.com/api/?name=John+Doe&background=1dbf73&color=fff"
-                    alt="Profile"
-                    className="w-8 h-8 rounded-full"
-                  />
-                  <ChevronDownIcon className="w-4 h-4 text-gray-600" />
+                  <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-end text-right">
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">John Doe</span>
+                      <span className="text-xs text-gray-500">Web Developer</span>
+                    </div>
+                    <div className="relative">
+                      <img
+                        src="https://ui-avatars.com/api/?name=John+Doe&background=1dbf73&color=fff"
+                        alt="Profile"
+                        className="w-9 h-9 rounded-full border-2 border-white shadow-sm"
+                      />
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-[#1dbf73] border-2 border-white rounded-full"></div>
+                    </div>
+                    <ChevronDownIcon className="w-4 h-4 text-gray-500 group-hover:text-gray-700" />
+                  </div>
                 </button>
 
-                {/* Profile Menu - Added z-index */}
+                {/* Enhanced Profile Dropdown */}
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200 z-[60]">
-                    <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">John Doe</p>
-                      <p className="text-xs text-gray-500">john@example.com</p>
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 z-[60]
+                                  overflow-hidden transform transition-all duration-200 origin-top">
+                    {/* User Profile Header */}
+                    <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/50">
+                      <div className="flex items-center gap-4">
+                        <div className="relative">
+                          <img
+                            src="https://ui-avatars.com/api/?name=John+Doe&background=1dbf73&color=fff"
+                            alt="Profile"
+                            className="w-12 h-12 rounded-xl border-2 border-white shadow-sm"
+                          />
+                          <div className="absolute -bottom-1 -right-1">
+                            <span className="bg-[#1dbf73] text-white text-xs px-2 py-0.5 rounded-full font-medium">
+                              Online
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-gray-900">John Doe</h4>
+                          <p className="text-xs text-gray-500">john@example.com</p>
+                        </div>
+                      </div>
                     </div>
-                    <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <UserCircleIcon className="w-4 h-4" />
-                      Profile
-                    </a>
-                    <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <CogIcon className="w-4 h-4" />
-                      Settings
-                    </a>
-                    <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      <QuestionMarkCircleIcon className="w-4 h-4" />
-                      Help Center
-                    </a>
-                    <div className="border-t border-gray-100 mt-2">
-                      <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                        <ArrowLeftOnRectangleIcon className="w-4 h-4" />
-                        Sign out
-                      </a>
+
+                    {/* Menu Items */}
+                    <div className="p-2">
+                      <div className="space-y-1">
+                        {[
+                          { name: 'Dashboard', icon: HomeIcon },
+                          { name: 'Active Orders', icon: FolderIcon, badge: '12' },
+                          { name: 'Messages', icon: ChatBubbleLeftIcon, badge: '5' },
+                          { name: 'Profile Settings', icon: CogIcon },
+                        ].map((item) => (
+                          <a
+                            key={item.name}
+                            href="#"
+                            className="flex items-center justify-between px-3 py-2 text-sm text-gray-600 
+                                     rounded-lg hover:bg-gray-50 hover:text-gray-900 
+                                     transition-colors duration-200 group"
+                          >
+                            <div className="flex items-center gap-2">
+                              <item.icon className="w-4 h-4 group-hover:text-[#1dbf73] 
+                                                  transition-colors duration-200" />
+                              <span>{item.name}</span>
+                            </div>
+                            {item.badge && (
+                              <span className="px-2 py-0.5 text-xs font-medium bg-[#1dbf73]/10 
+                                             text-[#1dbf73] rounded-full">
+                                {item.badge}
+                              </span>
+                            )}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-2 border-t border-gray-100 bg-gray-50/50">
+                      <div className="space-y-1">
+                        <button className="flex items-center gap-2 w-full px-3 py-2 text-sm 
+                                         text-gray-600 rounded-lg hover:bg-gray-100/80 
+                                         transition-colors duration-200">
+                          <QuestionMarkCircleIcon className="w-4 h-4" />
+                          Help & Support
+                        </button>
+                        <button className="flex items-center gap-2 w-full px-3 py-2 text-sm 
+                                         text-red-600 rounded-lg hover:bg-red-50 
+                                         transition-colors duration-200">
+                          <ArrowLeftOnRectangleIcon className="w-4 h-4" />
+                          Sign out
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -324,21 +419,79 @@ export default function OrdersPage() {
       <main className="pt-[104px]"> {/* Adjusted to account for exact header height (64px + 40px) */}
         <div className="px-8 py-6"> {/* Adjusted padding */}
           <div className="max-w-7xl mx-auto">
-            {/* Stats Section */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6"> {/* Reduced bottom margin */}
+            {/* Enhanced Stats Section */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
               {[
-                { title: "Active Orders", value: "12", icon: DocumentDuplicateIcon, color: "text-blue-500" },
-                { title: "Completed Today", value: "4", icon: CheckCircleIcon, color: "text-green-500" },
-                { title: "Urgent", value: "3", icon: ExclamationCircleIcon, color: "text-red-500" },
-                { title: "Revenue", value: "$12,450", icon: ArrowTrendingUpIcon, color: "text-purple-500" }
+                { 
+                  title: "Active Orders", 
+                  value: "12", 
+                  icon: DocumentDuplicateIcon, 
+                  color: "text-blue-500",
+                  bgColor: "bg-blue-500",
+                  lightBg: "bg-blue-50"
+                },
+                { 
+                  title: "Completed Today", 
+                  value: "4", 
+                  icon: CheckCircleIcon, 
+                  color: "text-[#1dbf73]",
+                  bgColor: "bg-[#1dbf73]",
+                  lightBg: "bg-[#1dbf73]/10"
+                },
+                { 
+                  title: "Urgent", 
+                  value: "3", 
+                  icon: ExclamationCircleIcon, 
+                  color: "text-rose-500",
+                  bgColor: "bg-rose-500",
+                  lightBg: "bg-rose-50"
+                },
+                { 
+                  title: "Revenue", 
+                  value: "$12,450", 
+                  icon: ArrowTrendingUpIcon, 
+                  color: "text-violet-500",
+                  bgColor: "bg-violet-500",
+                  lightBg: "bg-violet-50"
+                }
               ].map((stat, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm p-6">
-                  <div className="flex items-center justify-between">
+                <div 
+                  key={index} 
+                  className="relative bg-white rounded-xl shadow-sm p-6 border border-gray-100 
+                             hover:shadow-lg transition-all duration-300 group overflow-hidden"
+                >
+                  {/* Background Decoration */}
+                  <div 
+                    className={`absolute right-0 top-0 w-24 h-24 ${stat.lightBg} rounded-full 
+                                blur-2xl opacity-20 -mr-6 -mt-6 transition-all duration-300
+                                group-hover:opacity-40`}
+                  />
+
+                  <div className="relative flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-500">{stat.title}</p>
-                      <p className="text-2xl font-semibold mt-1">{stat.value}</p>
+                      <p className="text-sm font-medium text-gray-500 mb-1 group-hover:text-gray-700 
+                                  transition-colors duration-200">
+                        {stat.title}
+                      </p>
+                      <p className={`text-2xl font-semibold ${stat.color} transition-colors duration-200`}>
+                        {stat.value}
+                      </p>
                     </div>
-                    <stat.icon className={`w-8 h-8 ${stat.color}`} />
+                    <div 
+                      className={`p-3 rounded-xl ${stat.lightBg} ${stat.color} 
+                                group-hover:scale-110 transition-transform duration-200`}
+                    >
+                      <stat.icon className="w-6 h-6" />
+                    </div>
+                  </div>
+
+                  {/* Optional Subtle Progress Bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-50">
+                    <div 
+                      className={`h-full ${stat.bgColor} opacity-10 group-hover:opacity-20 
+                                transition-all duration-300`}
+                      style={{ width: '65%' }}
+                    />
                   </div>
                 </div>
               ))}
