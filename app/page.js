@@ -29,6 +29,7 @@ import {
   PaperClipIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
+import OrderViewModal from '@/components/OrderViewModal';
 
 export default function OrdersPage() {
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -142,6 +143,9 @@ export default function OrdersPage() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const filteredOrders = orders.filter(order => 
     order.projectTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -847,10 +851,14 @@ export default function OrdersPage() {
                           <span className="text-sm font-medium text-gray-700">{order.price}</span>
                         </div>
                       </div>
-                      <button className="flex items-center gap-1 text-sm text-[#1dbf73] hover:text-[#19a463] 
-                                       font-medium transition-colors duration-200 group">
+                      <button 
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setIsViewModalOpen(true);
+                        }}
+                        className="text-sm text-[#1dbf73] hover:text-[#19a463]"
+                      >
                         View Details
-                        <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
                       </button>
                     </div>
                   </div>
@@ -1054,6 +1062,16 @@ export default function OrdersPage() {
         <div 
           className="fixed inset-0 z-40"
           onClick={() => setIsSearchFocused(false)}
+        />
+      )}
+
+      {isViewModalOpen && selectedOrder && (
+        <OrderViewModal 
+          order={selectedOrder} 
+          onClose={() => {
+            setIsViewModalOpen(false);
+            setSelectedOrder(null);
+          }} 
         />
       )}
     </div>
