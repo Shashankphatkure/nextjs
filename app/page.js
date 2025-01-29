@@ -140,6 +140,14 @@ export default function OrdersPage() {
 
   const [isNewOrderModalOpen, setIsNewOrderModalOpen] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const filteredOrders = orders.filter(order => 
+    order.projectTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.clientName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
@@ -208,17 +216,133 @@ export default function OrdersPage() {
             {/* Right Section */}
             <div className="flex items-center gap-4">
               {/* Search */}
-              <div className="hidden md:block">
+              <div className="relative">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search projects..."
+                    placeholder="Search orders, clients..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
                     className="w-72 pl-10 pr-4 py-2 border border-gray-300 rounded-full 
-                             focus:outline-none focus:border-[#1dbf73] focus:ring-2 
-                             focus:ring-[#1dbf73]/20 text-sm"
+                              focus:outline-none focus:border-[#1dbf73] focus:ring-2 
+                              focus:ring-[#1dbf73]/20 text-sm"
                   />
                   <MagnifyingGlassIcon className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+                  
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                    >
+                      <XMarkIcon className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
+
+                {/* Search Suggestions Dropdown */}
+                {isSearchFocused && (
+                  <div className="absolute mt-2 w-[400px] bg-white rounded-xl shadow-lg border border-gray-100 
+                                  overflow-hidden z-50">
+                    {/* Search Stats */}
+                    <div className="px-4 py-2 bg-gray-50/50 border-b border-gray-100">
+                      <p className="text-xs text-gray-500">
+                        {searchQuery ? (
+                          <>Found {filteredOrders.length} results</>
+                        ) : (
+                          'Recent Searches'
+                        )}
+                      </p>
+                    </div>
+
+                    {/* Search Results */}
+                    <div className="max-h-[400px] overflow-y-auto">
+                      {searchQuery ? (
+                        filteredOrders.length > 0 ? (
+                          filteredOrders.map((order) => (
+                            <div
+                              key={order.id}
+                              className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-2 h-2 rounded-full ${
+                                    order.status === 'In Progress' ? 'bg-[#1dbf73]' :
+                                    order.status === 'Late' ? 'bg-red-500' :
+                                    'bg-gray-300'
+                                  }`} />
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-900">
+                                      {order.projectTitle}
+                                    </h4>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      {order.clientName} • Due {order.dueDate}
+                                    </p>
+                                  </div>
+                                </div>
+                                <span className={`text-xs px-2 py-1 rounded-full ${
+                                  order.status === 'In Progress' ? 'bg-[#1dbf73]/10 text-[#1dbf73]' :
+                                  order.status === 'Late' ? 'bg-red-100 text-red-500' :
+                                  'bg-gray-100 text-gray-600'
+                                }`}>
+                                  {order.status}
+                                </span>
+                              </div>
+                              {order.description && (
+                                <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                                  {order.description}
+                                </p>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="px-4 py-8 text-center">
+                            <FolderIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                            <p className="text-sm text-gray-500">No orders found</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              Try adjusting your search terms
+                            </p>
+                          </div>
+                        )
+                      ) : (
+                        // Recent/Suggested Searches
+                        <div>
+                          {['Website Development', 'Mobile App', 'Logo Design'].map((term) => (
+                            <div
+                              key={term}
+                              className="px-4 py-2 hover:bg-gray-50 cursor-pointer 
+                                       transition-colors flex items-center gap-2"
+                              onClick={() => setSearchQuery(term)}
+                            >
+                              <ClockIcon className="w-4 h-4 text-gray-400" />
+                              <span className="text-sm text-gray-600">{term}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="px-4 py-2 bg-gray-50/50 border-t border-gray-100">
+                      <div className="flex items-center justify-between">
+                        <button 
+                          onClick={() => setIsNewOrderModalOpen(true)}
+                          className="text-sm text-[#1dbf73] hover:text-[#19a463] 
+                                   flex items-center gap-1"
+                        >
+                          <PlusIcon className="w-4 h-4" />
+                          Create New Order
+                        </button>
+                        <button 
+                          className="text-xs text-gray-500 hover:text-gray-700"
+                          onClick={() => setSearchQuery('')}
+                        >
+                          Clear Search
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Notifications */}
@@ -923,6 +1047,14 @@ export default function OrdersPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Click Outside Handler */}
+      {isSearchFocused && (
+        <div 
+          className="fixed inset-0 z-40"
+          onClick={() => setIsSearchFocused(false)}
+        />
       )}
     </div>
   );
