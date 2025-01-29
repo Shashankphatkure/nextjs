@@ -198,7 +198,7 @@ export default function OrdersPage() {
                 <Bars3Icon className="h-6 w-6" />
               </button>
               <div className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-[#1dbf73]">DevOrders</span>
+                <span className="text-2xl font-bold text-[#1dbf73]">Shasha</span>
                 <div className="hidden lg:flex h-6 w-px bg-gray-200"></div>
                 <nav className="hidden lg:flex items-center gap-6">
                   <a href="#" className="flex items-center gap-2 text-[#1dbf73] px-3 py-2 text-sm font-medium">
