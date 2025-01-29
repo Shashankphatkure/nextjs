@@ -23,7 +23,10 @@ import {
   ChartBarIcon,
   CogIcon,
   QuestionMarkCircleIcon,
-  ArrowLeftOnRectangleIcon
+  ArrowLeftOnRectangleIcon,
+  XMarkIcon,
+  ArrowRightIcon,
+  PaperClipIcon
 } from '@heroicons/react/24/outline';
 
 export default function OrdersPage() {
@@ -341,54 +344,117 @@ export default function OrdersPage() {
               ))}
             </div>
 
-            {/* Filters Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6"> {/* Reduced bottom margin */}
-              <div className="flex items-center gap-4 mb-4">
-                <button
-                  className={`px-4 py-2 rounded-full ${
-                    selectedFilter === 'all' ? 'bg-[#1dbf73] text-white' : 'bg-gray-100'
-                  }`}
-                  onClick={() => setSelectedFilter('all')}
-                >
-                  All Orders
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-full ${
-                    selectedFilter === 'active' ? 'bg-[#1dbf73] text-white' : 'bg-gray-100'
-                  }`}
-                  onClick={() => setSelectedFilter('active')}
-                >
-                  Active
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-full ${
-                    selectedFilter === 'late' ? 'bg-[#1dbf73] text-white' : 'bg-gray-100'
-                  }`}
-                  onClick={() => setSelectedFilter('late')}
-                >
-                  Late
-                </button>
-                <button
-                  className={`px-4 py-2 rounded-full ${
-                    selectedFilter === 'completed' ? 'bg-[#1dbf73] text-white' : 'bg-gray-100'
-                  }`}
-                  onClick={() => setSelectedFilter('completed')}
-                >
-                  Completed
-                </button>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <div className="flex gap-4">
-                  <button className="flex items-center gap-2 text-gray-600 hover:text-[#1dbf73]">
-                    <FunnelIcon className="w-5 h-5" /> Filter
+            {/* Enhanced Filters Section */}
+            <div className="bg-white rounded-xl shadow-sm mb-6">
+              {/* Main Filters */}
+              <div className="p-4 border-b border-gray-100">
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 
+                    ${selectedFilter === 'all' 
+                      ? 'bg-[#1dbf73] text-white shadow-lg shadow-[#1dbf73]/20' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    onClick={() => setSelectedFilter('all')}
+                  >
+                    <div className="flex items-center gap-2">
+                      <DocumentDuplicateIcon className="w-4 h-4" />
+                      <span>All Orders</span>
+                      <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full">24</span>
+                    </div>
                   </button>
-                  <button className="flex items-center gap-2 text-gray-600 hover:text-[#1dbf73]">
-                    <CalendarIcon className="w-5 h-5" /> Date Range
+
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 
+                    ${selectedFilter === 'active' 
+                      ? 'bg-[#1dbf73] text-white shadow-lg shadow-[#1dbf73]/20' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    onClick={() => setSelectedFilter('active')}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ClockIcon className="w-4 h-4" />
+                      <span>Active</span>
+                      <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full">12</span>
+                    </div>
+                  </button>
+
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 
+                    ${selectedFilter === 'late' 
+                      ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    onClick={() => setSelectedFilter('late')}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ExclamationCircleIcon className="w-4 h-4" />
+                      <span>Late</span>
+                      <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full">3</span>
+                    </div>
+                  </button>
+
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 
+                    ${selectedFilter === 'completed' 
+                      ? 'bg-[#1dbf73] text-white shadow-lg shadow-[#1dbf73]/20' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    onClick={() => setSelectedFilter('completed')}
+                  >
+                    <div className="flex items-center gap-2">
+                      <CheckCircleIcon className="w-4 h-4" />
+                      <span>Completed</span>
+                      <span className="bg-white/20 text-xs py-0.5 px-2 rounded-full">45</span>
+                    </div>
                   </button>
                 </div>
-                <button className="flex items-center gap-2 bg-[#1dbf73] text-white px-4 py-2 rounded-lg hover:bg-[#19a463]">
-                  <PlusIcon className="w-5 h-5" /> New Order
+              </div>
+
+              {/* Advanced Filters */}
+              <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  {/* Filter Dropdown */}
+                  <div className="relative">
+                    <button className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 
+                                     hover:text-[#1dbf73] bg-gray-50 rounded-lg hover:bg-gray-100 
+                                     transition-colors duration-200">
+                      <FunnelIcon className="w-4 h-4" />
+                      <span>Filter</span>
+                      <ChevronDownIcon className="w-4 h-4" />
+                    </button>
+                    {/* Add dropdown menu here if needed */}
+                  </div>
+
+                  {/* Date Range Picker */}
+                  <div className="relative">
+                    <button className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 
+                                     hover:text-[#1dbf73] bg-gray-50 rounded-lg hover:bg-gray-100 
+                                     transition-colors duration-200">
+                      <CalendarIcon className="w-4 h-4" />
+                      <span>Last 30 Days</span>
+                      <ChevronDownIcon className="w-4 h-4" />
+                    </button>
+                    {/* Add date picker dropdown here if needed */}
+                  </div>
+
+                  {/* Active Filters (example) */}
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 text-xs font-medium text-[#1dbf73] bg-[#1dbf73]/10 
+                                  rounded-full flex items-center gap-1">
+                      Priority: High
+                      <XMarkIcon className="w-3 h-3 cursor-pointer" />
+                    </span>
+                    <span className="px-3 py-1 text-xs font-medium text-[#1dbf73] bg-[#1dbf73]/10 
+                                  rounded-full flex items-center gap-1">
+                      Status: In Progress
+                      <XMarkIcon className="w-3 h-3 cursor-pointer" />
+                    </span>
+                  </div>
+                </div>
+
+                {/* New Order Button */}
+                <button className="flex items-center gap-2 px-4 py-2 bg-[#1dbf73] text-white 
+                                 rounded-lg hover:bg-[#19a463] transition-colors duration-200 
+                                 shadow-lg shadow-[#1dbf73]/20">
+                  <PlusIcon className="w-5 h-5" />
+                  <span className="font-medium">New Order</span>
                 </button>
               </div>
             </div>
@@ -396,7 +462,9 @@ export default function OrdersPage() {
             {/* Orders Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {orders.map((order) => (
-                <div key={order.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div key={order.id} 
+                     className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 
+                                border border-gray-100 hover:border-[#1dbf73]/20 group">
                   <div className="p-6">
                     {/* Header */}
                     <div className="flex justify-between items-start mb-4">
@@ -404,29 +472,38 @@ export default function OrdersPage() {
                         <img 
                           src={order.clientAvatar} 
                           alt={order.clientName} 
-                          className="w-10 h-10 rounded-full"
+                          className="w-10 h-10 rounded-full ring-2 ring-gray-100"
                         />
                         <div>
-                          <h3 className="font-semibold text-lg text-gray-900">{order.projectTitle}</h3>
+                          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-[#1dbf73] 
+                                       transition-colors duration-200">
+                            {order.projectTitle}
+                          </h3>
                           <p className="text-sm text-gray-500">{order.clientName}</p>
                         </div>
                       </div>
                       {order.urgent && (
-                        <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+                        <span className="px-2.5 py-1.5 bg-red-100 text-red-600 text-xs font-medium rounded-full
+                                       flex items-center gap-1 shadow-sm shadow-red-100">
+                          <ExclamationCircleIcon className="w-3.5 h-3.5" />
                           Urgent
                         </span>
                       )}
                     </div>
 
+                    {/* Description */}
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{order.description}</p>
+
                     {/* Progress Bar */}
                     <div className="mb-4">
-                      <div className="flex justify-between items-center mb-1">
+                      <div className="flex justify-between items-center mb-1.5">
                         <span className="text-sm text-gray-500">Progress</span>
                         <span className="text-sm font-medium text-[#1dbf73]">{order.progress}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                         <div 
-                          className="bg-[#1dbf73] h-2 rounded-full transition-all duration-300"
+                          className="bg-[#1dbf73] h-2 rounded-full transition-all duration-300
+                                   shadow-sm shadow-[#1dbf73]/20"
                           style={{ width: `${order.progress}%` }}
                         ></div>
                       </div>
@@ -436,8 +513,11 @@ export default function OrdersPage() {
                     {order.tags && (
                       <div className="flex flex-wrap gap-2 mb-4">
                         {order.tags.map((tag, index) => (
-                          <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full flex items-center gap-1">
-                            <TagIcon className="w-3 h-3" />
+                          <span key={index} 
+                                className="px-2.5 py-1 bg-gray-50 text-gray-600 text-xs rounded-full 
+                                         flex items-center gap-1 hover:bg-gray-100 transition-colors duration-200
+                                         border border-gray-100">
+                            <TagIcon className="w-3.5 h-3.5" />
                             {tag}
                           </span>
                         ))}
@@ -453,12 +533,20 @@ export default function OrdersPage() {
                             ({order.milestones.filter(m => m.completed).length}/{order.milestones.length})
                           </span>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1.5">
                           {order.milestones.map((milestone, index) => (
-                            <div 
-                              key={index}
-                              className={`flex-1 h-1 rounded-full ${milestone.completed ? 'bg-[#1dbf73]' : 'bg-gray-200'}`}
-                            ></div>
+                            <div key={index} className="flex-1">
+                              <div 
+                                className={`h-1.5 rounded-full ${
+                                  milestone.completed 
+                                    ? 'bg-[#1dbf73] shadow-sm shadow-[#1dbf73]/20' 
+                                    : 'bg-gray-100'
+                                }`}
+                              ></div>
+                              <span className="text-xs text-gray-500 mt-1 block truncate">
+                                {milestone.name}
+                              </span>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -467,19 +555,19 @@ export default function OrdersPage() {
                     {/* Footer */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                       <div className="flex items-center gap-4">
-                        {order.rating && (
-                          <div className="flex items-center gap-1">
-                            <StarIcon className="w-4 h-4 text-yellow-400" />
-                            <span className="text-sm text-gray-600">{order.rating}</span>
-                          </div>
-                        )}
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <ClockIcon className="w-4 h-4 text-[#1dbf73]" />
                           <span className="text-sm text-gray-600">{order.timeLeft}</span>
                         </div>
+                        <div className="flex items-center gap-1.5">
+                          <CurrencyDollarIcon className="w-4 h-4 text-[#1dbf73]" />
+                          <span className="text-sm font-medium text-gray-700">{order.price}</span>
+                        </div>
                       </div>
-                      <button className="text-sm text-[#1dbf73] hover:text-[#19a463] font-medium">
-                        View Details →
+                      <button className="flex items-center gap-1 text-sm text-[#1dbf73] hover:text-[#19a463] 
+                                       font-medium transition-colors duration-200 group">
+                        View Details
+                        <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
                       </button>
                     </div>
                   </div>
