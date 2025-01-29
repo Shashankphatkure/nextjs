@@ -24,19 +24,42 @@ import {
   FolderIcon,
   LinkIcon,
   UserIcon,
-  ChatBubbleOvalLeftIcon
+  ChatBubbleOvalLeftIcon,
+  EllipsisHorizontalIcon,
+  FaceSmileIcon,
+  HandThumbUpIcon,
+  ChatBubbleLeftEllipsisIcon,
+  ShareIcon,
+  FlagIcon
 } from '@heroicons/react/24/outline';
 
 export default function OrderViewModal({ order, onClose }) {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('details'); // ['details', 'activity', 'files']
+  const [newComment, setNewComment] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all'); // ['all', 'comments', 'files', 'milestones']
 
   // Default data
-  const attachments = order.attachments || [
-    { name: 'Project Brief.pdf', size: '2.4 MB', type: 'pdf', date: '2024-03-10' },
-    { name: 'Design Assets.zip', size: '14.8 MB', type: 'zip', date: '2024-03-11' },
-    { name: 'Requirements.docx', size: '1.2 MB', type: 'doc', date: '2024-03-12' }
-  ];
+  const [attachments] = useState([
+    { 
+      name: 'Project Brief.pdf', 
+      size: '2.4 MB', 
+      type: 'pdf', 
+      date: '2024-03-10' 
+    },
+    { 
+      name: 'Design Assets.zip', 
+      size: '14.8 MB', 
+      type: 'zip', 
+      date: '2024-03-11' 
+    },
+    { 
+      name: 'Requirements.docx', 
+      size: '1.2 MB', 
+      type: 'doc', 
+      date: '2024-03-12' 
+    }
+  ]);
 
   const milestones = order.milestones || [
     { name: 'Project Setup', completed: true, dueDate: '2024-03-15', progress: 100 },
@@ -397,76 +420,210 @@ export default function OrderViewModal({ order, onClose }) {
 
             {/* Activity Tab Content */}
             {activeTab === 'activity' && (
-              <div className="p-6 max-w-3xl mx-auto">
-                <div className="space-y-8">
-                  {activityItems.map((item) => (
-                    <div key={item.id} className="relative">
-                      {/* Timeline connector */}
-                      <div className="absolute left-6 top-10 bottom-0 w-px bg-gray-200" />
-                      
-                      <div className="flex gap-4">
-                        <div className="relative">
-                          <img
-                            src={item.avatar}
-                            alt={item.user}
-                            className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
-                          />
-                          <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full 
-                                        flex items-center justify-center border-2 border-white
-                                        ${item.type === 'comment' ? 'bg-blue-500' :
-                                          item.type === 'milestone' ? 'bg-[#1dbf73]' :
-                                          'bg-purple-500'}`}>
-                            {item.type === 'comment' ? (
-                              <ChatBubbleOvalLeftIcon className="w-3 h-3 text-white" />
-                            ) : item.type === 'milestone' ? (
-                              <CheckCircleIcon className="w-3 h-3 text-white" />
-                            ) : (
-                              <DocumentIcon className="w-3 h-3 text-white" />
-                            )}
+              <div className="p-6">
+                {/* Activity Header with Filters */}
+                <div className="max-w-3xl mx-auto mb-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Activity Timeline</h3>
+                    <div className="flex items-center gap-2">
+                      {[
+                        { id: 'all', label: 'All Activities' },
+                        { id: 'comments', label: 'Comments' },
+                        { id: 'files', label: 'Files' },
+                        { id: 'milestones', label: 'Milestones' }
+                      ].map((filter) => (
+                        <button
+                          key={filter.id}
+                          onClick={() => setActiveFilter(filter.id)}
+                          className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                            activeFilter === filter.id
+                              ? 'bg-[#1dbf73]/10 text-[#1dbf73] font-medium'
+                              : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* New Comment Input */}
+                  <div className="bg-white rounded-xl border border-gray-200 p-4 mb-8">
+                    <div className="flex gap-4">
+                      <img
+                        src="https://ui-avatars.com/api/?name=Current+User"
+                        alt="Current User"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div className="flex-1">
+                        <textarea
+                          value={newComment}
+                          onChange={(e) => setNewComment(e.target.value)}
+                          placeholder="Add a comment..."
+                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                   focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] resize-none"
+                          rows="2"
+                        />
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg 
+                                           hover:bg-gray-100 transition-colors">
+                              <FaceSmileIcon className="w-5 h-5" />
+                            </button>
+                            <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg 
+                                           hover:bg-gray-100 transition-colors">
+                              <PhotoIcon className="w-5 h-5" />
+                            </button>
+                            <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg 
+                                           hover:bg-gray-100 transition-colors">
+                              <PaperClipIcon className="w-5 h-5" />
+                            </button>
                           </div>
-                        </div>
-                        
-                        <div className="flex-1">
-                          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <div className="flex items-center justify-between mb-2">
-                              <div>
-                                <span className="font-medium text-gray-900">{item.user}</span>
-                                <span className="text-gray-500 mx-2">·</span>
-                                <span className="text-gray-500">{item.time}</span>
-                              </div>
-                            </div>
-                            
-                            <p className="text-gray-600">
-                              {item.type === 'milestone' ? (
-                                <span>Completed milestone: <strong>{item.content}</strong></span>
-                              ) : item.type === 'file' ? (
-                                <span>Uploaded new file: <strong>{item.content}</strong></span>
-                              ) : (
-                                item.content
-                              )}
-                            </p>
-                            
-                            {item.type === 'file' && (
-                              <div className="mt-3 flex items-center gap-2">
-                                <button className="px-3 py-1.5 text-sm text-[#1dbf73] hover:text-[#19a463] 
-                                               rounded-lg hover:bg-[#1dbf73]/5 transition-colors
-                                               flex items-center gap-2">
-                                  <EyeIcon className="w-4 h-4" />
-                                  Preview
-                                </button>
-                                <button className="px-3 py-1.5 text-sm text-[#1dbf73] hover:text-[#19a463] 
-                                               rounded-lg hover:bg-[#1dbf73]/5 transition-colors
-                                               flex items-center gap-2">
-                                  <ArrowDownTrayIcon className="w-4 h-4" />
-                                  Download
-                                </button>
-                              </div>
-                            )}
-                          </div>
+                          <button
+                            disabled={!newComment.trim()}
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                              newComment.trim()
+                                ? 'bg-[#1dbf73] text-white hover:bg-[#19a463]'
+                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}
+                          >
+                            Post Comment
+                          </button>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Activity Timeline */}
+                  <div className="space-y-8">
+                    {activityItems
+                      .filter(item => activeFilter === 'all' || item.type === activeFilter.slice(0, -1))
+                      .map((item) => (
+                        <div key={item.id} className="relative">
+                          {/* Timeline connector */}
+                          <div className="absolute left-6 top-10 bottom-0 w-px bg-gray-200" />
+                          
+                          <div className="flex gap-4">
+                            <div className="relative">
+                              <img
+                                src={item.avatar}
+                                alt={item.user}
+                                className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
+                              />
+                              <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full 
+                                            flex items-center justify-center border-2 border-white
+                                            shadow-sm ${
+                                              item.type === 'comment' ? 'bg-blue-500' :
+                                              item.type === 'milestone' ? 'bg-[#1dbf73]' :
+                                              'bg-purple-500'
+                                            }`}
+                              >
+                                {item.type === 'comment' ? (
+                                  <ChatBubbleOvalLeftIcon className="w-3 h-3 text-white" />
+                                ) : item.type === 'milestone' ? (
+                                  <CheckCircleIcon className="w-3 h-3 text-white" />
+                                ) : (
+                                  <DocumentIcon className="w-3 h-3 text-white" />
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="flex-1">
+                              <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm
+                                          hover:shadow-md transition-shadow">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium text-gray-900">{item.user}</span>
+                                    <span className="text-gray-500">·</span>
+                                    <span className="text-gray-500">{item.time}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <button className="p-1.5 text-gray-400 hover:text-gray-600 
+                                                   rounded-lg hover:bg-gray-100 transition-colors">
+                                      <FlagIcon className="w-4 h-4" />
+                                    </button>
+                                    <button className="p-1.5 text-gray-400 hover:text-gray-600 
+                                                   rounded-lg hover:bg-gray-100 transition-colors">
+                                      <EllipsisHorizontalIcon className="w-4 h-4" />
+                                    </button>
+                                  </div>
+                                </div>
+                                
+                                <div className="text-gray-600">
+                                  {item.type === 'milestone' ? (
+                                    <div className="flex items-center gap-2 text-[#1dbf73] font-medium">
+                                      <CheckCircleIcon className="w-5 h-5" />
+                                      <span>Completed milestone: <span className="text-gray-900">{item.content}</span></span>
+                                    </div>
+                                  ) : item.type === 'file' ? (
+                                    <div>
+                                      <p className="mb-2">Uploaded new file:</p>
+                                      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                        <DocumentIcon className="w-8 h-8 text-gray-400" />
+                                        <div>
+                                          <p className="font-medium text-gray-900">{item.content}</p>
+                                          <p className="text-sm text-gray-500">2.4 MB · PDF</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <p>{item.content}</p>
+                                  )}
+                                </div>
+                                
+                                {/* Activity Actions */}
+                                <div className="mt-4 flex items-center gap-4 border-t border-gray-100 pt-3">
+                                  <button className="flex items-center gap-2 text-sm text-gray-500 
+                                                 hover:text-gray-700 transition-colors">
+                                    <HandThumbUpIcon className="w-4 h-4" />
+                                    Like
+                                  </button>
+                                  <button className="flex items-center gap-2 text-sm text-gray-500 
+                                                 hover:text-gray-700 transition-colors">
+                                    <ChatBubbleLeftEllipsisIcon className="w-4 h-4" />
+                                    Reply
+                                  </button>
+                                  <button className="flex items-center gap-2 text-sm text-gray-500 
+                                                 hover:text-gray-700 transition-colors">
+                                    <ShareIcon className="w-4 h-4" />
+                                    Share
+                                  </button>
+                                </div>
+
+                                {/* Replies (if any) */}
+                                {item.replies && (
+                                  <div className="mt-3 pl-4 border-l-2 border-gray-100">
+                                    {item.replies.map((reply, index) => (
+                                      <div key={index} className="mt-3 first:mt-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                          <img
+                                            src={reply.avatar}
+                                            alt={reply.user}
+                                            className="w-6 h-6 rounded-full"
+                                          />
+                                          <span className="font-medium text-sm text-gray-900">{reply.user}</span>
+                                          <span className="text-xs text-gray-500">{reply.time}</span>
+                                        </div>
+                                        <p className="text-sm text-gray-600 ml-8">{reply.content}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                    {/* Load More Button */}
+                    <div className="text-center pt-4">
+                      <button className="px-4 py-2 text-sm text-[#1dbf73] hover:text-[#19a463] 
+                                     border border-[#1dbf73] rounded-lg hover:bg-[#1dbf73]/5 
+                                     transition-colors">
+                        Load More Activities
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -487,7 +644,7 @@ export default function OrderViewModal({ order, onClose }) {
 
                 {/* Files Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {attachments.map((file, index) => (
+                  {Array.isArray(attachments) && attachments.map((file, index) => (
                     <div key={index} className="group relative bg-white rounded-xl border border-gray-200 
                                       overflow-hidden hover:border-[#1dbf73] transition-colors">
                       {/* File Preview */}
