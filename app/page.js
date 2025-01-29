@@ -26,7 +26,8 @@ import {
   ArrowLeftOnRectangleIcon,
   XMarkIcon,
   ArrowRightIcon,
-  PaperClipIcon
+  PaperClipIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 export default function OrdersPage() {
@@ -136,6 +137,8 @@ export default function OrdersPage() {
 
   const notificationsRef = useRef(null);
   const profileRef = useRef(null);
+
+  const [isNewOrderModalOpen, setIsNewOrderModalOpen] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -603,9 +606,12 @@ export default function OrdersPage() {
                 </div>
 
                 {/* New Order Button */}
-                <button className="flex items-center gap-2 px-4 py-2 bg-[#1dbf73] text-white 
-                                 rounded-lg hover:bg-[#19a463] transition-colors duration-200 
-                                 shadow-lg shadow-[#1dbf73]/20">
+                <button 
+                  onClick={() => setIsNewOrderModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#1dbf73] text-white 
+                           rounded-lg hover:bg-[#19a463] transition-colors duration-200 
+                           shadow-lg shadow-[#1dbf73]/20"
+                >
                   <PlusIcon className="w-5 h-5" />
                   <span className="font-medium">New Order</span>
                 </button>
@@ -730,6 +736,194 @@ export default function OrdersPage() {
           </div>
         </div>
       </main>
+
+      {/* New Order Modal */}
+      {isNewOrderModalOpen && (
+        <div className="fixed inset-0 z-[70] overflow-y-auto">
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
+               onClick={() => setIsNewOrderModalOpen(false)} />
+
+          {/* Modal */}
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl 
+                          transform transition-all overflow-hidden">
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Create New Order</h3>
+                  <button 
+                    onClick={() => setIsNewOrderModalOpen(false)}
+                    className="text-gray-400 hover:text-gray-500 transition-colors"
+                  >
+                    <XMarkIcon className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Content */}
+              <div className="px-6 py-4">
+                <div className="space-y-6">
+                  {/* Project Details */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Project Title
+                      </label>
+                      <input 
+                        type="text"
+                        placeholder="Enter project title"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                 focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Client Name
+                      </label>
+                      <input 
+                        type="text"
+                        placeholder="Enter client name"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                 focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Project Description
+                      </label>
+                      <textarea 
+                        rows="3"
+                        placeholder="Enter project description"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                 focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Project Timeline & Budget */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Due Date
+                      </label>
+                      <input 
+                        type="date"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                 focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Budget
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+                        <input 
+                          type="number"
+                          placeholder="0.00"
+                          className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                   focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Milestones */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Project Milestones
+                      </label>
+                      <button className="text-sm text-[#1dbf73] hover:text-[#19a463] 
+                                       flex items-center gap-1">
+                        <PlusIcon className="w-4 h-4" />
+                        Add Milestone
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {[1, 2, 3].map((milestone) => (
+                        <div 
+                          key={milestone}
+                          className="p-3 border border-gray-200 rounded-lg bg-gray-50/50"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1 grid grid-cols-2 gap-3">
+                              <input 
+                                type="text"
+                                placeholder="Milestone name"
+                                className="px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-2 
+                                         focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                              />
+                              <input 
+                                type="date"
+                                className="px-3 py-1.5 border border-gray-200 rounded-lg focus:ring-2 
+                                         focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                              />
+                            </div>
+                            <button className="p-1 text-gray-400 hover:text-red-500 transition-colors">
+                              <TrashIcon className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Priority & Tags */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Priority
+                      </label>
+                      <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                       focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all">
+                        <option>Low</option>
+                        <option>Medium</option>
+                        <option>High</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tags
+                      </label>
+                      <input 
+                        type="text"
+                        placeholder="Add tags separated by commas"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 
+                                 focus:ring-[#1dbf73]/20 focus:border-[#1dbf73] transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+                <div className="flex items-center justify-end gap-3">
+                  <button 
+                    onClick={() => setIsNewOrderModalOpen(false)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-800 
+                             transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    className="px-4 py-2 text-sm font-medium text-white bg-[#1dbf73] 
+                             hover:bg-[#19a463] rounded-lg shadow-lg shadow-[#1dbf73]/25 
+                             transition-all duration-200 flex items-center gap-2"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                    Create Order
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
